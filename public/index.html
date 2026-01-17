@@ -1,4 +1,3 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -10,48 +9,44 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-dark-950 text-dark-100 font-sans min-h-screen">
+<body>
   <!-- Background Effects -->
-  <div class="fixed inset-0 overflow-hidden pointer-events-none">
-    <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary-400/5 rounded-full blur-3xl animate-float"></div>
+  <div style="position: fixed; inset: 0; overflow: hidden; pointer-events: none;">
+    <div style="position: absolute; top: -10rem; right: -10rem; width: 20rem; height: 20rem; background: rgba(14, 165, 233, 0.1); border-radius: 9999px; filter: blur(60px);" class="animate-pulse-slow"></div>
+    <div style="position: absolute; bottom: -10rem; left: -10rem; width: 20rem; height: 20rem; background: rgba(2, 132, 199, 0.1); border-radius: 9999px; filter: blur(60px); animation-delay: 1s;" class="animate-pulse-slow"></div>
   </div>
 
   <!-- Main Container -->
-  <div class="relative z-10 min-h-screen flex flex-col">
+  <div style="position: relative; z-index: 10; min-height: 100vh; display: flex; flex-direction: column;">
     <!-- Header -->
-    <header class="border-b border-dark-800/50 backdrop-blur-xl bg-dark-950/80 sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 sm:h-20">
+    <header>
+      <div class="container">
+        <div class="header-content">
           <!-- Logo -->
-          <div class="flex items-center gap-3 animate-fade-in">
-            <div class="relative">
-              <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/25">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-                </svg>
-              </div>
-              <div class="absolute -inset-1 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl blur opacity-30 animate-glow"></div>
+          <div class="logo-container">
+            <div class="logo">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+              </svg>
             </div>
-            <div>
-              <h1 class="text-lg sm:text-xl font-bold bg-gradient-to-r from-white to-dark-300 bg-clip-text text-transparent">SubTranslate</h1>
-              <p class="text-xs text-dark-500 hidden sm:block">AI-Powered Translation</p>
+            <div class="logo-text">
+              <h1>SubTranslate</h1>
+              <p>AI-Powered Translation</p>
             </div>
           </div>
 
           <!-- Theme Toggle & GitHub -->
-          <div class="flex items-center gap-2 sm:gap-4">
-            <button id="themeToggle" class="p-2 sm:p-2.5 rounded-xl bg-dark-800/50 hover:bg-dark-700/50 border border-dark-700/50 transition-all duration-300 hover:scale-105 group">
-              <svg class="w-5 h-5 text-dark-400 group-hover:text-primary-400 transition-colors sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="header-actions">
+            <button id="themeToggle" class="icon-button">
+              <svg class="sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
               </svg>
-              <svg class="w-5 h-5 text-dark-400 group-hover:text-primary-400 transition-colors moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
               </svg>
             </button>
-            <a href="https://github.com" target="_blank" class="p-2 sm:p-2.5 rounded-xl bg-dark-800/50 hover:bg-dark-700/50 border border-dark-700/50 transition-all duration-300 hover:scale-105 group">
-              <svg class="w-5 h-5 text-dark-400 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+            <a href="https://github.com" target="_blank" class="icon-button">
+              <svg fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
               </svg>
             </a>
@@ -61,79 +56,75 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 py-6 sm:py-8 lg:py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main>
+      <div class="container">
         <!-- Upload Section -->
-        <section id="uploadSection" class="animate-fade-in-up">
-          <div class="text-center mb-8 sm:mb-12">
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">
-              <span class="bg-gradient-to-r from-white via-dark-200 to-dark-400 bg-clip-text text-transparent">Translate Subtitles with </span>
-              <span class="bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent">AI Power</span>
+        <section id="uploadSection" class="upload-section animate-fade-in-up">
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 1rem;">
+              Translate Subtitles with <span class="gradient-text">AI Power</span>
             </h2>
-            <p class="text-dark-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">
+            <p style="max-width: 42rem; margin: 0 auto;">
               Upload your subtitle files and translate them instantly using GPT-4, Gemini, or Grok. 
               Supports SRT, VTT, ASS, SSA, and more formats.
             </p>
           </div>
 
           <!-- Dropzone -->
-          <div id="dropzone" class="relative group cursor-pointer">
-            <div class="absolute -inset-0.5 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl blur opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
-            <div class="relative bg-dark-900/50 backdrop-blur-xl border-2 border-dashed border-dark-700 hover:border-primary-500/50 rounded-2xl p-8 sm:p-12 lg:p-16 transition-all duration-300">
-              <input type="file" id="fileInput" accept=".srt,.vtt,.ass,.ssa,.sub,.sbv,.txt" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-              
-              <div class="flex flex-col items-center justify-center text-center">
-                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-dark-800/50 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <svg class="w-8 h-8 sm:w-10 sm:h-10 text-dark-500 group-hover:text-primary-400 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                  </svg>
-                </div>
-                <h3 class="text-lg sm:text-xl font-semibold text-dark-200 mb-2">Drop your subtitle file here</h3>
-                <p class="text-dark-500 text-sm sm:text-base mb-4">or click to browse</p>
-                <div class="flex flex-wrap justify-center gap-2">
-                  <span class="px-2.5 py-1 bg-dark-800/50 rounded-lg text-xs text-dark-400 border border-dark-700/50">.srt</span>
-                  <span class="px-2.5 py-1 bg-dark-800/50 rounded-lg text-xs text-dark-400 border border-dark-700/50">.vtt</span>
-                  <span class="px-2.5 py-1 bg-dark-800/50 rounded-lg text-xs text-dark-400 border border-dark-700/50">.ass</span>
-                  <span class="px-2.5 py-1 bg-dark-800/50 rounded-lg text-xs text-dark-400 border border-dark-700/50">.ssa</span>
-                  <span class="px-2.5 py-1 bg-dark-800/50 rounded-lg text-xs text-dark-400 border border-dark-700/50">.sub</span>
-                  <span class="px-2.5 py-1 bg-dark-800/50 rounded-lg text-xs text-dark-400 border border-dark-700/50">.sbv</span>
-                </div>
+          <div id="dropzone" class="dropzone">
+            <input type="file" id="fileInput" accept=".srt,.vtt,.ass,.ssa,.sub,.sbv,.txt" class="file-input">
+            
+            <div class="dropzone-content">
+              <div class="dropzone-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                </svg>
+              </div>
+              <h3>Drop your subtitle file here</h3>
+              <p>or click to browse</p>
+              <div class="file-formats">
+                <span class="file-format">.srt</span>
+                <span class="file-format">.vtt</span>
+                <span class="file-format">.ass</span>
+                <span class="file-format">.ssa</span>
+                <span class="file-format">.sub</span>
+                <span class="file-format">.sbv</span>
               </div>
             </div>
           </div>
         </section>
 
         <!-- Editor Section (Hidden initially) -->
-        <section id="editorSection" class="hidden">
+        <section id="editorSection" class="editor-section">
           <!-- Controls Bar -->
-          <div class="bg-dark-900/50 backdrop-blur-xl border border-dark-800/50 rounded-2xl p-4 sm:p-6 mb-6 animate-fade-in-down">
-            <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
+          <div class="controls-bar">
+            <div class="controls-content">
               <!-- File Info -->
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="w-10 h-10 bg-primary-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="file-info">
+                <div class="file-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   </svg>
                 </div>
-                <div class="min-w-0">
-                  <p id="fileName" class="font-medium text-dark-200 truncate">subtitle.srt</p>
-                  <p id="fileInfo" class="text-xs text-dark-500">0 lines • SRT format</p>
+                <div class="file-details">
+                  <p id="fileName" class="file-name">subtitle.srt</p>
+                  <p id="fileInfo" class="file-meta">0 lines • SRT format</p>
                 </div>
-                <button id="removeFile" class="p-2 hover:bg-dark-800/50 rounded-lg transition-colors ml-auto lg:ml-0">
-                  <svg class="w-4 h-4 text-dark-500 hover:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button id="removeFile" class="remove-file">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                   </svg>
                 </button>
               </div>
 
-              <div class="h-px lg:h-auto lg:w-px bg-dark-800 flex-shrink-0"></div>
+              <div class="divider"></div>
 
               <!-- Translation Settings -->
-              <div class="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              <div class="translation-settings">
                 <!-- Source Language -->
-                <div class="space-y-1.5">
-                  <label class="text-xs text-dark-500 font-medium">From</label>
-                  <select id="sourceLanguage" class="w-full bg-dark-800/50 border border-dark-700/50 rounded-xl px-3 py-2.5 text-sm text-dark-200 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/25 transition-all">
+                <div class="form-group">
+                  <label class="form-label">From</label>
+                  <select id="sourceLanguage" class="form-select">
                     <option value="auto">Auto Detect</option>
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
@@ -151,9 +142,9 @@
                 </div>
 
                 <!-- Target Language -->
-                <div class="space-y-1.5">
-                  <label class="text-xs text-dark-500 font-medium">To</label>
-                  <select id="targetLanguage" class="w-full bg-dark-800/50 border border-dark-700/50 rounded-xl px-3 py-2.5 text-sm text-dark-200 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/25 transition-all">
+                <div class="form-group">
+                  <label class="form-label">To</label>
+                  <select id="targetLanguage" class="form-select">
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
                     <option value="fr">French</option>
@@ -177,17 +168,17 @@
                 </div>
 
                 <!-- AI Model -->
-                <div class="space-y-1.5 col-span-2 sm:col-span-1">
-                  <label class="text-xs text-dark-500 font-medium">AI Model</label>
-                  <select id="aiModel" class="w-full bg-dark-800/50 border border-dark-700/50 rounded-xl px-3 py-2.5 text-sm text-dark-200 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/25 transition-all">
+                <div class="form-group full-width">
+                  <label class="form-label">AI Model</label>
+                  <select id="aiModel" class="form-select">
                     <option value="" disabled selected>Loading models...</option>
                   </select>
                 </div>
 
                 <!-- Actions -->
-                <div class="col-span-2 sm:col-span-1 flex gap-2">
-                  <button id="translateBtn" class="flex-1 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-400 hover:to-primary-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="form-group full-width">
+                  <button id="translateBtn" class="btn btn-primary" style="width: 100%; margin-top: 1.375rem;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10"></path>
                     </svg>
                     <span>Translate</span>
@@ -196,100 +187,95 @@
               </div>
             </div>
 
-            <!-- Advanced Options Toggle -->
-            <div class="mt-4 pt-4 border-t border-dark-800/50">
-              <button id="advancedToggle" class="flex items-center gap-2 text-sm text-dark-400 hover:text-dark-200 transition-colors">
-                <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Advanced Options -->
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(30, 41, 59, 0.5);">
+              <button id="advancedToggle" style="display: flex; align-items: center; gap: 0.5rem; background: none; border: none; color: var(--dark-400); cursor: pointer; font-size: 0.875rem; transition: color 0.15s;">
+                <svg style="width: 1rem; height: 1rem; transition: transform 0.3s;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
                 <span>Advanced Options</span>
               </button>
               
-              <div id="advancedOptions" class="hidden mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="space-y-1.5">
-                  <label class="text-xs text-dark-500 font-medium">Batch Size</label>
-                  <input type="number" id="batchSize" value="10" min="1" max="50" class="w-full bg-dark-800/50 border border-dark-700/50 rounded-xl px-3 py-2.5 text-sm text-dark-200 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/25 transition-all">
+              <div id="advancedOptions" class="hidden" style="margin-top: 1rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Batch Size</label>
+                  <input type="number" id="batchSize" value="10" min="1" max="50" class="form-input">
                 </div>
-                <div class="space-y-1.5">
-                  <label class="text-xs text-dark-500 font-medium">Output Format</label>
-                  <select id="outputFormat" class="w-full bg-dark-800/50 border border-dark-700/50 rounded-xl px-3 py-2.5 text-sm text-dark-200 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/25 transition-all">
+                <div class="form-group">
+                  <label class="form-label">Output Format</label>
+                  <select id="outputFormat" class="form-select">
                     <option value="same">Same as input</option>
                     <option value="srt">SRT</option>
                     <option value="vtt">VTT</option>
                     <option value="ass">ASS</option>
                   </select>
                 </div>
-                <div class="sm:col-span-2 space-y-1.5">
-                  <label class="text-xs text-dark-500 font-medium">Custom Instructions</label>
-                  <input type="text" id="customInstructions" placeholder="e.g., Use formal language, preserve humor..." class="w-full bg-dark-800/50 border border-dark-700/50 rounded-xl px-3 py-2.5 text-sm text-dark-200 placeholder:text-dark-600 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/25 transition-all">
+                <div class="form-group" style="grid-column: span 2;">
+                  <label class="form-label">Custom Instructions</label>
+                  <input type="text" id="customInstructions" placeholder="e.g., Use formal language, preserve humor..." class="form-input">
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Progress Bar (Hidden initially) -->
-          <div id="progressContainer" class="hidden mb-6 animate-fade-in">
-            <div class="bg-dark-900/50 backdrop-blur-xl border border-dark-800/50 rounded-2xl p-4 sm:p-6">
-              <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center">
-                    <svg class="w-4 h-4 text-primary-400 animate-spin" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <p class="font-medium text-dark-200">Translating...</p>
-                    <p id="progressText" class="text-xs text-dark-500">0 of 0 lines completed</p>
-                  </div>
+          <!-- Progress Bar -->
+          <div id="progressContainer" class="progress-container">
+            <div class="progress-header">
+              <div class="progress-info">
+                <div class="progress-icon">
+                  <svg fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
                 </div>
-                <span id="progressPercent" class="text-2xl font-bold text-primary-400">0%</span>
+                <div>
+                  <p class="progress-title">Translating...</p>
+                  <p id="progressText" class="progress-subtitle">0 of 0 lines completed</p>
+                </div>
               </div>
-              <div class="relative h-2 bg-dark-800 rounded-full overflow-hidden">
-                <div id="progressBar" class="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-500 to-primary-400 rounded-full transition-all duration-300" style="width: 0%"></div>
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" style="background-size: 200% 100%"></div>
-              </div>
+              <span id="progressPercent" class="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div id="progressBar" class="progress-bar"></div>
             </div>
           </div>
 
           <!-- Subtitle Editor -->
-          <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
+          <div class="editor-grid">
             <!-- Original Column -->
-            <div class="bg-dark-900/50 backdrop-blur-xl border border-dark-800/50 rounded-2xl overflow-hidden animate-slide-in-left">
-              <div class="px-4 sm:px-6 py-4 border-b border-dark-800/50 flex items-center justify-between">
-                <h3 class="font-semibold text-dark-200 flex items-center gap-2">
-                  <span class="w-2 h-2 bg-dark-500 rounded-full"></span>
+            <div class="subtitle-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">
+                  <span class="panel-dot gray"></span>
                   Original
                 </h3>
-                <span id="originalCount" class="text-xs text-dark-500 bg-dark-800/50 px-2 py-1 rounded-lg">0 lines</span>
+                <span id="originalCount" class="panel-count">0 lines</span>
               </div>
-              <div id="originalList" class="max-h-[60vh] overflow-y-auto scrollbar-thin">
+              <div id="originalList" class="subtitle-list">
                 <!-- Subtitle items will be inserted here -->
               </div>
             </div>
 
             <!-- Translated Column -->
-            <div class="bg-dark-900/50 backdrop-blur-xl border border-dark-800/50 rounded-2xl overflow-hidden animate-slide-in-right">
-              <div class="px-4 sm:px-6 py-4 border-b border-dark-800/50 flex items-center justify-between">
-                <h3 class="font-semibold text-dark-200 flex items-center gap-2">
-                  <span class="w-2 h-2 bg-primary-500 rounded-full"></span>
+            <div class="subtitle-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">
+                  <span class="panel-dot primary"></span>
                   Translated
                 </h3>
-                <div class="flex items-center gap-2">
-                  <span id="translatedCount" class="text-xs text-dark-500 bg-dark-800/50 px-2 py-1 rounded-lg">0 lines</span>
-                  <button id="downloadBtn" class="hidden px-3 py-1.5 bg-primary-500/10 hover:bg-primary-500/20 text-primary-400 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5">
-                    <svg class="w-3.5 h-3.// Continuing public/index.html
-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="panel-actions">
+                  <span id="translatedCount" class="panel-count">0 lines</span>
+                  <button id="downloadBtn" class="download-btn">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                     </svg>
                     Download
                   </button>
                 </div>
               </div>
-              <div id="translatedList" class="max-h-[60vh] overflow-y-auto scrollbar-thin">
-                <!-- Translated subtitle items will be inserted here -->
-                <div class="flex items-center justify-center h-48 text-dark-500">
-                  <p class="text-sm">Translations will appear here</p>
+              <div id="translatedList" class="subtitle-list">
+                <div class="empty-state">
+                  <p>Translations will appear here</p>
                 </div>
               </div>
             </div>
@@ -299,18 +285,18 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-dark-800/50 py-6 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p class="text-dark-500 text-sm">© 2024 SubTranslate. Built with AI.</p>
-          <div class="flex items-center gap-4">
-            <span class="text-dark-600 text-xs">Powered by</span>
-            <div class="flex items-center gap-3">
-              <span class="text-dark-400 text-xs font-medium">GPT-4</span>
-              <span class="text-dark-700">•</span>
-              <span class="text-dark-400 text-xs font-medium">Gemini</span>
-              <span class="text-dark-700">•</span>
-              <span class="text-dark-400 text-xs font-medium">Grok</span>
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <p class="footer-text">© 2024 SubTranslate. Built with AI.</p>
+          <div class="footer-powered">
+            <span class="footer-label">Powered by</span>
+            <div class="footer-models">
+              <span class="footer-model">GPT-4</span>
+              <span class="footer-separator">•</span>
+              <span class="footer-model">Gemini</span>
+              <span class="footer-separator">•</span>
+              <span class="footer-model">Grok</span>
             </div>
           </div>
         </div>
@@ -319,39 +305,39 @@
   </div>
 
   <!-- Toast Container -->
-  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+  <div id="toastContainer" class="toast-container"></div>
 
   <!-- Edit Modal -->
-  <div id="editModal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-dark-950/80 backdrop-blur-sm" id="modalOverlay"></div>
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-      <div class="bg-dark-900 border border-dark-800 rounded-2xl w-full max-w-lg animate-scale-in shadow-2xl">
-        <div class="px-6 py-4 border-b border-dark-800 flex items-center justify-between">
-          <h3 class="font-semibold text-dark-200">Edit Translation</h3>
-          <button id="closeModal" class="p-1.5 hover:bg-dark-800 rounded-lg transition-colors">
-            <svg class="w-5 h-5 text-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div id="editModal" class="modal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-wrapper">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Edit Translation</h3>
+          <button id="closeModal" class="modal-close">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
-        <div class="p-6 space-y-4">
-          <div>
-            <label class="text-xs text-dark-500 font-medium mb-1.5 block">Original Text</label>
-            <p id="modalOriginalText" class="text-dark-300 bg-dark-800/50 rounded-xl p-3 text-sm"></p>
+        <div class="modal-body">
+          <div class="modal-field">
+            <label class="form-label" style="margin-bottom: 0.375rem; display: block;">Original Text</label>
+            <p id="modalOriginalText" class="modal-text"></p>
           </div>
-          <div>
-            <label class="text-xs text-dark-500 font-medium mb-1.5 block">Translated Text</label>
-            <textarea id="modalTranslatedText" rows="3" class="w-full bg-dark-800/50 border border-dark-700/50 rounded-xl px-4 py-3 text-sm text-dark-200 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/25 transition-all resize-none"></textarea>
+          <div class="modal-field">
+            <label class="form-label" style="margin-bottom: 0.375rem; display: block;">Translated Text</label>
+            <textarea id="modalTranslatedText" rows="3" class="modal-textarea"></textarea>
           </div>
-          <div class="flex items-center gap-2 pt-2">
-            <button id="retranslateBtn" class="flex-1 bg-dark-800 hover:bg-dark-700 text-dark-200 font-medium px-4 py-2.5 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="modal-actions">
+            <button id="retranslateBtn" class="btn btn-secondary">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
               </svg>
               Re-translate
             </button>
-            <button id="saveEditBtn" class="flex-1 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-400 hover:to-primary-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm transition-all hover:shadow-lg hover:shadow-primary-500/25 flex items-center justify-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button id="saveEditBtn" class="btn btn-primary">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
               Save
