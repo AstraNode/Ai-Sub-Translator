@@ -1,25 +1,31 @@
 // api/services/ai-providers/grok.js
 class GrokProvider {
-  constructor() {
-    this.apiKey = process.env.GROK_API_KEY;
+  constructor(apiKey) {
+    // Check constructor arg, then XAI (standard), then GROK (custom)
+    this.apiKey = apiKey || process.env.XAI_API_KEY || process.env.GROK_API_KEY;
     this.baseUrl = 'https://api.x.ai/v1';
   }
 
   async translateBatch({ texts, sourceLanguage, targetLanguage, model, customInstructions }) {
     if (!this.apiKey) {
-      throw new Error('Grok API key not configured');
+      throw new Error('Grok/xAI API key not configured. Set XAI_API_KEY in .env');
     }
 
-    const systemPrompt = `You are a professional subtitle translator. Translate the following subtitles from ${sourceLanguage || 'auto-detected language'} to ${targetLanguage}.
+    // 1. Sanitize Model: Default to 'grok-beta' if generic 'grok-1' or empty is passed
+    // 'grok-beta' is the standard accessible model. 'grok-2' might require specific tier access.
+    let validModel = model;
+    if (!validModel || validModel === 'grok-1') {
+      validModel = 'grok-beta';
+    }
 
-Rules:
-- Maintain the original meaning and tone
-- Keep translations concise for subtitle timing
-- Preserve any formatting tags
-- Return ONLY the translations, one per line, in the same order
-${customInstructions ? `\nAdditional instructions: ${customInstructions}` : ''}`;
+    const systemPrompt = `You are a professional subtitle translator. Translate from ${sourceLanguage || 'auto'} to ${targetLanguage}.
 
-    const userPrompt = texts.map((text, i) => `${i + 1}. ${text}`).join('\n');
+RULES:
+1. Return ONLY a raw JSON Array of strings.
+2. Maintain exact array length (${texts.length} items).
+3. Preserve HTML tags (<i>, <b>).
+4. Do NOT use Markdown code blocks.
+${customInstructions ? `Note: ${customInstructions}` : ''}`;
 
     const response = await fetch(`${this.baseUrl}/chat/completions`, {
       method: 'POST',
@@ -28,31 +34,41 @@ ${customInstructions ? `\nAdditional instructions: ${customInstructions}` : ''}`
         'Authorization': `Bearer ${this.apiKey}`
       },
       body: JSON.stringify({
-        model: model || 'grok-2',
+        model: validModel,
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: 'user', content: JSON.stringify(texts) }
         ],
-        temperature: 0.3
+        temperature: 0.1 // Low temperature for consistent JSON
       })
     });
 
     if (!response.ok) {
-      throw new Error(`Grok API error: ${response.statusText}`);
+      const errText = await response.text();
+      // Handle specific 403 Forbidden
+      if (response.status === 403) {
+        throw new Error(`Grok Forbidden (403): Invalid Key or no access to model '${validModel}'. Response: ${errText}`);
+      }
+      throw new Error(`Grok API error (${response.status}): ${errText}`);
     }
 
     const data = await response.json();
-    const translatedText = data.choices[0].message.content.trim();
+    const content = data.choices[0].message.content.trim();
 
-    const translations = translatedText.split('\n')
-      .map(line => line.replace(/^\d+\.\s*/, '').trim())
-      .filter(line => line.length > 0);
+    // Robust JSON Parsing
+    try {
+      // Remove markdown if Grok adds it (e.g. ```json ... ```)
+      const cleanJson = content.replace(/```json/g, '').replace(/```/g, '').trim();
+      const translations = JSON.parse(cleanJson);
 
-    while (translations.length < texts.length) {
-      translations.push(texts[translations.length]);
+      if (!Array.isArray(translations)) throw new Error('Not an array');
+      
+      return translations;
+    } catch (e) {
+      console.warn('Grok JSON parse failed, falling back to text split', content);
+      // Fallback: split by newline if JSON fails
+      return content.split('\n').filter(line => line.trim().length > 0);
     }
-
-    return translations.slice(0, texts.length);
   }
 
   async translateSingle({ text, sourceLanguage, targetLanguage, model }) {
@@ -60,6 +76,9 @@ ${customInstructions ? `\nAdditional instructions: ${customInstructions}` : ''}`
       throw new Error('Grok API key not configured');
     }
 
+    let validModel = model || 'grok-beta';
+    if (validModel === 'grok-1') validModel = 'grok-beta';
+
     const response = await fetch(`${this.baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
@@ -67,11 +86,11 @@ ${customInstructions ? `\nAdditional instructions: ${customInstructions}` : ''}`
         'Authorization': `Bearer ${this.apiKey}`
       },
       body: JSON.stringify({
-        model: model || 'grok-2',
+        model: validModel,
         messages: [
           {
             role: 'system',
-            content: `Translate subtitle text from ${sourceLanguage || 'auto-detected language'} to ${targetLanguage}. Return only the translation.`
+            content: `Translate subtitle text from ${sourceLanguage || 'auto'} to ${targetLanguage}. Return only the translation.`
           },
           { role: 'user', content: text }
         ],
@@ -80,7 +99,8 @@ ${customInstructions ? `\nAdditional instructions: ${customInstructions}` : ''}`
     });
 
     if (!response.ok) {
-      throw new Error(`Grok API error: ${response.statusText}`);
+      const errText = await response.text();
+      throw new Error(`Grok API error (${response.status}): ${errText}`);
     }
 
     const data = await response.json();
