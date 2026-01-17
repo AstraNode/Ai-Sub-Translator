@@ -40,16 +40,18 @@ router.get('/', (req, res) => {
   if (process.env.GEMINI_API_KEY) {
     models.push(
       {
-        id: 'gemini-1.5-pro',
-        name: 'Gemini 1.5 Pro',
-        provider: 'gemini',
-        description: 'Advanced reasoning and long context'
+       id: 'gemini-2.0-flash-exp',
+       name: 'Gemini 2.0 Flash (Experimental)',
+       provider: 'gemini',
+       description: 'Newest, Fastest, Free',
+       contextWindow: 1000000
       },
       {
-        id: 'gemini-1.5-flash',
-        name: 'Gemini 1.5 Flash',
-        provider: 'gemini',
-        description: 'Fast and efficient'
+       id: 'gemini-1.5-flash',
+       name: 'Gemini 1.5 Flash',
+       provider: 'gemini',
+       description: 'Stable, Fast, Free Tier',
+       contextWindow: 1000000
       },
       {
         id: 'gemini-pro',
