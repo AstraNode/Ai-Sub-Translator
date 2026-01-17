@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const AIProviders = require('../services/ai-providers');
 
+// Helper function to pause execution (Prevents 429 Errors)
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 // Translate subtitles
 router.post('/', async (req, res) => {
   try {
@@ -39,6 +42,8 @@ router.post('/', async (req, res) => {
       batches.push(subtitles.slice(i, i + batchSize));
     }
 
+    console.log(`Starting translation: ${subtitles.length} lines in ${batches.length} batches using ${provider}/${model}`);
+
     let completedBatches = 0;
 
     for (const batch of batches) {
@@ -71,6 +76,17 @@ router.post('/', async (req, res) => {
           total: subtitles.length
         })}\n\n`);
 
+        // --- RATE LIMITING FIX ---
+        // Gemini Free Tier allows 15 requests/minute (1 req every 4 seconds).
+        // Without this sleep, you WILL get "429 Too Many Requests".
+        if (provider === 'gemini') {
+          await sleep(4000); 
+        } else {
+          // Small buffer for other providers (OpenAI/Grok) to be safe
+          await sleep(500); 
+        }
+        // -------------------------
+
       } catch (batchError) {
         console.error('Batch translation error:', batchError);
         // Keep original text for failed translations
@@ -81,6 +97,9 @@ router.post('/', async (req, res) => {
             error: true
           });
         });
+        
+        // Even if error occurs, wait a bit before retrying next batch
+        await sleep(2000);
       }
     }
 
@@ -93,6 +112,11 @@ router.post('/', async (req, res) => {
     res.end();
   } catch (error) {
     console.error('Translation error:', error);
+    // If headers haven't been sent, return JSON error
+    if (!res.headersSent) {
+       return res.status(500).json({ error: error.message });
+    }
+    // If stream started, send error event
     res.write(`data: ${JSON.stringify({
       type: 'error',
       message: error.message
