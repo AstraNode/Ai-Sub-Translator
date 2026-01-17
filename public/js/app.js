@@ -244,12 +244,18 @@ class App {
 
   showEditor() {
     this.uploadSection.classList.add('hidden');
+    
+    // CSS uses .active to display this section
+    this.editorSection.classList.add('active');
     this.editorSection.classList.remove('hidden');
     this.editorSection.classList.add('animate-fade-in');
   }
 
   hideEditor() {
+    // CSS uses .active to display this section
+    this.editorSection.classList.remove('active');
     this.editorSection.classList.add('hidden');
+    
     this.uploadSection.classList.remove('hidden');
   }
 
@@ -394,11 +400,13 @@ class App {
   }
 
   showProgress() {
+    this.progressContainer.classList.add('active'); // Added .active
     this.progressContainer.classList.remove('hidden');
     this.progressContainer.classList.add('animate-fade-in');
   }
 
   hideProgress() {
+    this.progressContainer.classList.remove('active'); // Removed .active
     this.progressContainer.classList.add('hidden');
   }
 
@@ -451,11 +459,15 @@ class App {
     this.modalOriginalText.textContent = sub.originalText || sub.text;
     this.modalTranslatedText.value = sub.text;
     
+    // Fix: CSS uses .active for modal visibility
+    this.editModal.classList.add('active');
     this.editModal.classList.remove('hidden');
     this.modalTranslatedText.focus();
   }
 
   closeEditModal() {
+    // Fix: Remove .active
+    this.editModal.classList.remove('active');
     this.editModal.classList.add('hidden');
     this.currentEditIndex = null;
   }
