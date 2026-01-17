@@ -3,93 +3,89 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 class GeminiProvider {
   constructor(apiKey) {
-    if (!apiKey) {
-      throw new Error('Gemini API key is missing');
+    // Support both Environment Variable AND Constructor Argument
+    const key = apiKey || process.env.GEMINI_API_KEY;
+    if (key) {
+      this.genAI = new GoogleGenerativeAI(key);
     }
-    this.genAI = new GoogleGenerativeAI(apiKey);
   }
 
-  async translateBatch(texts, sourceLang, targetLang, modelId, customInstructions) {
-    // 1. SANITIZE THE MODEL ID
-    // If frontend sends 'gemini-1.5-pro' (which causes 404), switch to Flash
-    let validModelId = modelId;
-    if (!validModelId || validModelId === 'gemini-1.5-pro') {
-      validModelId = 'gemini-1.5-flash';
+  async translateBatch({ texts, sourceLanguage, targetLanguage, model, customInstructions }) {
+    if (!this.genAI) {
+      throw new Error('Gemini API key not configured');
     }
 
-    console.log(`[Gemini] Requesting model: ${validModelId}`);
+    // --- FIX: PREVENT 404 ERROR ---
+    // If model is missing or is the broken 'pro' version, switch to Flash
+    let targetModel = model;
+    if (!targetModel || targetModel === 'gemini-1.5-pro') {
+      targetModel = 'gemini-1.5-flash';
+    }
+    // -----------------------------
+
+    console.log(`[Gemini] Batch translating with model: ${targetModel}`);
 
     try {
-      const model = this.genAI.getGenerativeModel({ 
-        model: validModelId,
-        generationConfig: {
-            // Force JSON response (works better on Flash models)
-            responseMimeType: "application/json"
-        }
-      });
+      const genModel = this.genAI.getGenerativeModel({ model: targetModel });
 
-      const prompt = this.buildPrompt(texts, sourceLang, targetLang, customInstructions);
-      
-      const result = await model.generateContent(prompt);
+      const prompt = `You are a professional subtitle translator. Translate the following subtitles from ${sourceLanguage || 'auto-detected language'} to ${targetLanguage}.
+
+Rules:
+- Maintain the original meaning and tone
+- Keep translations concise
+- Preserve formatting tags (<i>, <b>, {\\an8})
+- Return ONLY the translations, one per line, matching the input order
+- NO numbering, NO markdown, NO extra text
+${customInstructions ? `\nAdditional instructions: ${customInstructions}` : ''}
+
+Subtitles to translate:
+${texts.map((text, i) => `Line_${i}: ${text}`).join('\n')}`;
+
+      const result = await genModel.generateContent(prompt);
       const response = await result.response;
-      const text = response.text();
+      const translatedText = response.text().trim();
 
-      return this.parseResponse(text, texts.length);
-    } catch (error) {
-      console.error('[Gemini] API Error:', error);
-      
-      // If the specific model fails, try one last fallback to gemini-pro (1.0)
-      if (error.message.includes('404') || error.message.includes('not found')) {
-         console.warn('[Gemini] Model not found, attempting fallback to gemini-pro');
-         return this.fallbackTranslate(texts, sourceLang, targetLang, customInstructions);
+      // Robust parsing to handle cases where AI adds "Line_X:" or numbering
+      const translations = translatedText.split('\n')
+        .map(line => line.replace(/^(Line_\d+:|\d+\.)\s*/i, '').trim())
+        .filter(line => line.length > 0);
+
+      // Fallback: If AI missed lines, fill with original text to prevent sync errors
+      while (translations.length < texts.length) {
+        translations.push(texts[translations.length]);
       }
-      
-      throw new Error(`Gemini Error: ${error.message}`);
+
+      return translations.slice(0, texts.length);
+
+    } catch (error) {
+      console.error('Gemini Batch Error:', error);
+      // Nice error message for the frontend
+      if (error.message.includes('404')) {
+        throw new Error(`Model ${targetModel} not found. Please select 'Gemini 1.5 Flash'.`);
+      }
+      throw error;
     }
   }
 
-  // Fallback method for older models
-  async fallbackTranslate(texts, sourceLang, targetLang, customInstructions) {
-    const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
-    const prompt = this.buildPrompt(texts, sourceLang, targetLang, customInstructions);
-    const result = await model.generateContent(prompt);
+  async translateSingle({ text, sourceLanguage, targetLanguage, model }) {
+    if (!this.genAI) {
+      throw new Error('Gemini API key not configured');
+    }
+
+    // --- FIX: PREVENT 404 ERROR ---
+    let targetModel = model;
+    if (!targetModel || targetModel === 'gemini-1.5-pro') {
+      targetModel = 'gemini-1.5-flash';
+    }
+    // -----------------------------
+
+    const genModel = this.genAI.getGenerativeModel({ model: targetModel });
+
+    const prompt = `Translate subtitle from ${sourceLanguage || 'auto'} to ${targetLanguage}. Return ONLY the translation. Text: ${text}`;
+
+    const result = await genModel.generateContent(prompt);
     const response = await result.response;
-    return this.parseResponse(response.text(), texts.length);
-  }
-
-  async translateSingle(text, sourceLang, targetLang, modelId) {
-    let validModelId = modelId;
-    if (!validModelId || validModelId === 'gemini-1.5-pro') {
-      validModelId = 'gemini-1.5-flash';
-    }
-
-    const model = this.genAI.getGenerativeModel({ model: validModelId });
-    const prompt = `Translate to ${targetLang}. Text: "${text}"`;
-    const result = await model.generateContent(prompt);
-    return result.response.text();
-  }
-
-  buildPrompt(texts, sourceLang, targetLang, customInstructions) {
-    return `Translate these subtitles from ${sourceLang || 'auto'} to ${targetLang}.
-    RULES:
-    1. Output strictly a JSON Array of strings.
-    2. Maintain exact length: ${texts.length}.
-    3. Preserve HTML tags.
-    ${customInstructions ? `4. Instruction: ${customInstructions}` : ''}
-    
-    Input: ${JSON.stringify(texts)}
-    Output JSON:`;
-  }
-
-  parseResponse(responseText, expectedLength) {
-    try {
-      let clean = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-      const json = JSON.parse(clean);
-      if (!Array.isArray(json)) throw new Error('Not an array');
-      return json;
-    } catch (e) {
-      throw new Error('AI returned invalid JSON');
-    }
+    return response.text().trim();
   }
 }
 
